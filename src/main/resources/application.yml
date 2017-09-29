@@ -1,0 +1,63 @@
+spring:
+  application:
+    name: hsd-gitlab-hooks
+  profiles:
+    active: dev
+  jackson: 
+    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES 
+  datasource:
+      url: jdbc:mysql://192.168.254.246:3308/webhooks?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+      username: root
+      password: hsd_dev
+      filters: log4j,wall,mergeStat
+ 
+
+server:
+  port: 8039
+
+management:
+  security:
+    enabled: false
+
+info:
+  name: "@project.name@"
+  description: "@project.description@" 
+  version: "@project.version@"
+  spring-boot-version: "@project.parent.version@"  
+
+eureka:
+    instance:
+        statusPageUrlPath: /info
+        healthCheckUrlPath: /health
+    client:
+        serviceUrl:
+            defaultZone: http://localhost:9080/eureka/
+swagger:
+    basepackage: com.hsd.gitlab.systemhook.web
+    service:
+        name: systemhook
+        description: systemhook后端服务
+        developer: systemhook
+
+logging:
+  level.root: warn
+  path: logs/
+  file: hsd-devops-console.log
+
+hooktools:
+  swagger-open: false #是否开启swagger (true/false)
+  
+  
+mybatis-plus:
+  mapper-locations: classpath:mapper/*.xml
+  typeAliasesPackage: com.hsd.gitlab.systemhook.domain
+  global-config:
+    id-type: 0  #0:数据库ID自增   1:用户输入id  2:全局唯一id(IdWorker)  3:全局唯一ID(uuid)
+    db-column-underline: false
+    refresh-mapper: true
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: true #配置的缓存的全局开关
+    lazyLoadingEnabled: true #延时加载的开关
+    multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
