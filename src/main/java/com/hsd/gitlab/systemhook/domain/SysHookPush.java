@@ -24,7 +24,7 @@ public class SysHookPush extends IdEntity {
     
     private Long authorId;//SysAuthorID
     
-    private int projectId;
+    private Long projectId;
     
     private Long totalCommitsCount;
     
@@ -144,20 +144,6 @@ public class SysHookPush extends IdEntity {
     }
 
     /**
-     * @return the projectId
-     */
-    public int getProjectId() {
-        return projectId;
-    }
-
-    /**
-     * @param projectId the projectId to set
-     */
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    /**
      * @return the totalCommitsCount
      */
     public Long getTotalCommitsCount() {
@@ -169,6 +155,20 @@ public class SysHookPush extends IdEntity {
      */
     public void setTotalCommitsCount(Long totalCommitsCount) {
         this.totalCommitsCount = totalCommitsCount;
+    }
+
+    /**
+     * @return the projectId
+     */
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    /**
+     * @param projectId the projectId to set
+     */
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
     
