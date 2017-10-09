@@ -4,11 +4,20 @@
  */
 package com.hsd.gitlab.systemhook.service.impl;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
+import org.apache.http.HttpResponse;
+import org.apache.http.HttpStatus;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -22,16 +31,18 @@ import com.hsd.gitlab.systemhook.dao.SysRPushCommitMapper;
 import com.hsd.gitlab.systemhook.domain.SysAuthor;
 import com.hsd.gitlab.systemhook.domain.SysCommit;
 import com.hsd.gitlab.systemhook.domain.SysHookPush;
+import com.hsd.gitlab.systemhook.domain.SysOutgoingGroup;
 import com.hsd.gitlab.systemhook.domain.SysProject;
 import com.hsd.gitlab.systemhook.domain.SysRPushCommit;
 import com.hsd.gitlab.systemhook.service.EventHandleService;
+import com.hsd.gitlab.type.IMType;
 
 /**
  * Class Description
  * @version Sep 28, 20176:48:58 PM
  * @author Ford.CHEN
  */
-@Service("pushEventHandleServiceImpl")
+@Service("pushEventHandleService")
 public class PushEventHandleServiceImpl implements EventHandleService {
     
     private final static Logger logger = LoggerFactory.getLogger(PushEventHandleServiceImpl.class);
@@ -49,7 +60,10 @@ public class PushEventHandleServiceImpl implements EventHandleService {
     SysRPushCommitMapper sysRPushCommitMapper;
     
     @Resource
-    SysCommitServiceImpl sysCommitServiceImpl;
+    SysCommitServiceImpl sysCommitService;
+    
+    @Resource
+    SysOutgoingGroupServiceImpl sysOutgoingGroupService;
     
     
     /* (non-Javadoc)
@@ -57,16 +71,71 @@ public class PushEventHandleServiceImpl implements EventHandleService {
      */
     @Override
     public void handle(String message) {
+        //1. parse message to PushEvent
         PushEvent event = JSON.parseObject(message, PushEvent.class);
         
+        //2. Outgoing PushEvent
+        outgoingPushEvent(event);
+        
+        //3. Persist PushEvent, for statistic analysis later
+        persistPushEvent(event);
+    }
+
+
+    /**
+     * Method Description
+     * @version Oct 9, 20174:33:55 PM
+     * @author Ford.CHEN
+     * @param event
+     * @throws IOException
+     * @throws ClientProtocolException
+     */
+    private void outgoingPushEvent(PushEvent event)  {
         //2.1 跟据groupName获取 SysOutgoingGroup 集合outgroupList
+        List<SysOutgoingGroup> outgoingList = sysOutgoingGroupService.selectList(new EntityWrapper<SysOutgoingGroup>());
+        
         
         //2.2 多线程、异步分发 消息到对应 outgroupList
-        //2.2.1 组装消息
-        //2.2.2 多线程，分发
-        
-        
-        //持久化 SysAuthor
+        if(! outgoingList.isEmpty()){
+            for(SysOutgoingGroup outgoingGroup : outgoingList){
+                if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
+                    HttpClient httpclient = HttpClients.createDefault();
+                    
+                    HttpPost httppost = new HttpPost(outgoingGroup.getIm_url());
+                    httppost.addHeader("Content-Type", "application/json; charset=utf-8");
+                    
+                    String textMsg = "";
+                    if(IMType.dingtalk.equals(outgoingGroup.getImType())){
+                        event.toDingTalkMarkdown();
+                    }else if(IMType.slack.equals(outgoingGroup.getImType())){
+                        //TODO FOR Slack
+                    }else{
+                        //TODO
+                    }
+                    
+                    StringEntity se = new StringEntity(textMsg, "utf-8");
+                    httppost.setEntity(se);
+                    
+                    HttpResponse response = httpclient.execute(httppost);
+                    if (response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
+                        String result= EntityUtils.toString(response.getEntity(), "utf-8");
+                        logger.info(result);
+                    } 
+                }
+            }
+        }
+    }
+
+
+    /**
+     * Method Description
+     * @version Oct 9, 20174:32:56 PM
+     * @author Ford.CHEN
+     * @param event
+     */
+    
+    private void persistPushEvent(PushEvent event) {
+        //3.1 持久化 SysAuthor
         EntityWrapper<SysAuthor> wrapper = new EntityWrapper<SysAuthor>();
         wrapper.eq("email", event.getUserEmail());
         SysAuthor author = sysAuthorService.selectOne(wrapper);
@@ -82,7 +151,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
             sysAuthorService.insert(author);
         }
         
-        //持久化 SysProject
+        //3.2 持久化 SysProject
         EntityWrapper<SysProject> projectWrapper = new EntityWrapper<SysProject>();
         Project projectDto = event.getProject();
         projectWrapper.eq("name",projectDto.getName());
@@ -102,7 +171,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
             sysProjectService.insert(project);
         }
         
-        //持久化 SysCommit
+        //3.3 持久化 SysCommit
         List<SysCommit> sysCommitList = new ArrayList<SysCommit>();
         
         List<Commits> commits = event.getCommits();
@@ -133,14 +202,14 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                
                sysCommit.setProjectId(project.getId());
                
-               sysCommitServiceImpl.insert(sysCommit);
+               sysCommitService.insert(sysCommit);
                
                sysCommitList.add(sysCommit);
            }
         }
         
         
-        //持久化 SysHookPush
+        //3.4 持久化 SysHookPush
         SysHookPush push = new SysHookPush();
         push.setObjectKind(event.getObjectKind());
         push.setEventName(event.getEventName());;
@@ -156,7 +225,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         
         sysHookPushService.insert(push);
         
-        //持久化 R表
+        //3.5 持久化 R表, i miss for Hibernate
         if(! sysCommitList.isEmpty()){
            for(SysCommit commit : sysCommitList){
                SysRPushCommit rPushCommit = new SysRPushCommit();
@@ -167,7 +236,14 @@ public class PushEventHandleServiceImpl implements EventHandleService {
            }
         }
     }
+    
 
+    /**
+     * @param sysOutgoingGroupService the sysOutgoingGroupService to set
+     */
+    public void setSysOutgoingGroupService(SysOutgoingGroupServiceImpl sysOutgoingGroupService) {
+        this.sysOutgoingGroupService = sysOutgoingGroupService;
+    }
 
     /**
      * @param sysAuthorService the sysAuthorService to set
@@ -205,9 +281,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
      * @param sysCommitServiceImpl the sysCommitServiceImpl to set
      */
     public void setSysCommitServiceImpl(SysCommitServiceImpl sysCommitServiceImpl) {
-        this.sysCommitServiceImpl = sysCommitServiceImpl;
+        this.sysCommitService = sysCommitServiceImpl;
     }
-    
-    
     
 }

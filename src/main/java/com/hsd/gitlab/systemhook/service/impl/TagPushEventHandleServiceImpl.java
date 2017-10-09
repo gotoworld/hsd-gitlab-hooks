@@ -13,7 +13,7 @@ import com.hsd.gitlab.systemhook.service.EventHandleService;
  * @version Sep 28, 20176:48:58 PM
  * @author Ford.CHEN
  */
-@Service("tagPushEventHandleServiceImpl")
+@Service("tagPushEventHandleService")
 public class TagPushEventHandleServiceImpl implements EventHandleService {
     
     /* (non-Javadoc)

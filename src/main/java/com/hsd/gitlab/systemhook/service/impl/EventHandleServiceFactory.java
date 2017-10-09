@@ -24,10 +24,10 @@ public class EventHandleServiceFactory implements ApplicationContextAware {
     private static Map<String,SystemEventNames> serviceNameToEnumMap = new HashMap<String,SystemEventNames>();
     
     static {
-        serviceNameToEnumMap.put("pushEventHandleServiceImpl", SystemEventNames.push); 
-        serviceNameToEnumMap.put("tagPushEventHandleServiceImpl", SystemEventNames.tag_push); 
-        serviceNameToEnumMap.put("othersEventHandleServiceImpl", SystemEventNames.repository_update); 
-        serviceNameToEnumMap.put("othersEventHandleServiceImpl", SystemEventNames.others_event); 
+        serviceNameToEnumMap.put("pushEventHandleService", SystemEventNames.push); 
+        serviceNameToEnumMap.put("tagPushEventHandleService", SystemEventNames.tag_push); 
+        serviceNameToEnumMap.put("othersEventHandleService", SystemEventNames.repository_update); 
+        serviceNameToEnumMap.put("othersEventHandleService", SystemEventNames.others_event); 
     }
     
     /*

@@ -28,8 +28,8 @@ public class SysOutgoingGroupMapperTest extends BaseJunit {
     @Test
     public void testSave(){
         SysOutgoingGroup outgoing = new SysOutgoingGroup(); 
-        outgoing.setGitlabGroupName("root-test");
-        outgoing.setIm_url("http://sdfsdfs.com");
+        outgoing.setGitlabGroupName("infrastructure");
+        outgoing.setIm_url("https://oapi.dingtalk.com/robot/send?access_token=dd3cfd11d2169fea3a897fe7fb8a59a806e8dc42239a917269a1d3cdc0d94ca4");
         outgoing.setImType(IMType.dingtalk);
         
         mapper.insert(outgoing);
@@ -38,7 +38,6 @@ public class SysOutgoingGroupMapperTest extends BaseJunit {
     @Test
     public void testPageQuery(){
         PageInfo pageInfo = new PageInfo(1,20);
-        
         
         Page<SysOutgoingGroup> page = new Page<SysOutgoingGroup>(pageInfo.getNowpage(), pageInfo.getSize());
         EntityWrapper<SysOutgoingGroup> wrapper = new EntityWrapper<SysOutgoingGroup>();

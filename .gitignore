@@ -20,11 +20,4 @@ CATALINA.LOGSDIR_IS_UNDEFINED*
 catalina.home_IS_UNDEFINED*
 catalina.home_IS_UNDEFINED/*
 /bin/
-
-# svn
-.svn/
-
-# disconf
-disconf/
-
-.externalToolBuilders/*
+/logs/*

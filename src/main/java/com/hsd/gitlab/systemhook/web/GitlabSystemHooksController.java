@@ -64,4 +64,13 @@ public class GitlabSystemHooksController {
         
     }
     
+    
+
+    /**
+     * @param eventHandleServiceFactory the eventHandleServiceFactory to set
+     */
+    public void setEventHandleServiceFactory(EventHandleServiceFactory eventHandleServiceFactory) {
+        this.eventHandleServiceFactory = eventHandleServiceFactory;
+    }
+    
 }

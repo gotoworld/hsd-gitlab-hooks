@@ -1,5 +1,8 @@
 package com.hsd.gitlab.systemhook.bean.event;
 import java.util.List;
+import java.util.Locale;
+
+import org.joda.time.DateTime;
 
 import com.hsd.gitlab.systemhook.bean.Commits;
 import com.hsd.gitlab.systemhook.bean.Project;
@@ -105,6 +108,47 @@ public class PushEvent extends BaseEvent {
     private List<Commits> commits;
     
     private Long totalCommitsCount;
+    
+    
+    /**
+     * 
+     * Method Description
+     * @version Oct 9, 201711:45:10 AM
+     * @author Ford.CHEN
+     * @return
+     */
+    public String toDingTalkMarkdown(){
+        
+       StringBuffer sb = new StringBuffer();
+       sb.append("{ \"msgtype\": \"markdown\",   \"markdown\":          {\"title\": \"gitlab push event\", \"text\" : \"");
+
+       String branch = "";
+       String[] s = ref.split("\\/");
+       if(s.length == 3){
+           branch = s[2];
+       }
+       
+       String title = "#### " + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       sb.append(title);
+       
+       
+       String content= ""; 
+       for(Commits commit : commits){
+//           String cid = commit.getId().substring(0, 7);
+           
+           DateTime dateTime = new DateTime(commit.getTimestamp());
+           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() + ", " + dateTime.toString("yyyy/MM/dd HH:mm:ss EE",Locale.ENGLISH) +  "\\n\\n   ";
+       }
+       sb.append(content);
+       
+       sb.append(" \"}}");
+        
+        return sb.toString();
+    }
+    
+    
+    
+    
 
     /**
      * @return the before
