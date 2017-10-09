@@ -5,20 +5,15 @@
 package com.hsd.gitlab.systemhook.service.impl;
 
 import java.io.IOException;
-import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import javax.annotation.Resource;
 
-import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.methods.CloseableHttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -37,6 +32,7 @@ import com.hsd.gitlab.systemhook.domain.SysProject;
 import com.hsd.gitlab.systemhook.domain.SysRPushCommit;
 import com.hsd.gitlab.systemhook.service.EventHandleService;
 import com.hsd.gitlab.type.IMType;
+import com.hsd.gitlab.utils.HttpClientUtils;
 
 /**
  * Class Description
@@ -97,6 +93,8 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         
         
         //2.2 多线程、异步分发 消息到对应 outgroupList
+        ExecutorService executorService = Executors.newCachedThreadPool();   
+        
         if(! outgoingList.isEmpty()){
             for(SysOutgoingGroup outgoingGroup : outgoingList){
                 if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
@@ -111,57 +109,46 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                         //TODO
                     }
                     
-                    //2.2.2 post message
-                    post(textMsg, outgoingGroup.getIm_url());
+                    //2.2.2 post message, multi-thread asynchronous
+                    executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getIm_url()));   
                 }
             }
         }
     }
     
     
-    /** 
+
+    /**
      * 
-     * Method Description
-     * @version Oct 9, 20175:14:27 PM
+     * Class Description
+     * @version Oct 9, 20175:41:59 PM
      * @author Ford.CHEN
-     * @param textMsg
-     * @param outgoingUrl
      */
-    private void post(String textMsg, String outgoingUrl) {  
-        // 创建默认的httpClient实例.    
-        CloseableHttpClient httpclient = HttpClients.createDefault();  
-        // 创建httppost    
-        HttpPost httppost = new HttpPost(outgoingUrl);  
+    class TaskOfOutgoingPost implements Callable<String> {
+        private String textMsg;
+        private String outgoingUrl;
         
-        // 创建参数队列    
-        StringEntity se = new StringEntity(textMsg, "utf-8");
-        try {  
-            httppost.setEntity(se);  
-            logger.info("executing request --> {}", httppost.getURI());  
-            CloseableHttpResponse response = httpclient.execute(httppost);  
-            try {  
-                HttpEntity entity = response.getEntity();  
-                if (entity != null) {  
-                    logger.info(EntityUtils.toString(entity, "UTF-8"));
-                }  
-            } finally {  
-                response.close();  
-            }  
-        } catch (ClientProtocolException e) {  
-            logger.error("Outgoing PushEvent with ClientProtocolException ", e); 
-        } catch (UnsupportedEncodingException e) {  
-            logger.error("Outgoing PushEvent with UnsupportedEncodingException ", e);   
-        } catch (IOException e) {  
-            logger.error("Outgoing PushEvent with IOException ", e);   
-        } finally {  
-            // 关闭连接,释放资源    
-            try {  
-                httpclient.close();  
-            } catch (IOException e) {  
-                logger.error("Outgoing PushEvent with IOException ", e);  
-            }  
+        public TaskOfOutgoingPost(String textMsg,String outgoingUrl){   
+            this.textMsg = textMsg;   
+            this.outgoingUrl = outgoingUrl;   
         }
-    }  
+        
+        /**
+         * 任务的具体过程，一旦任务传给ExecutorService的submit方法， 则该方法自动在一个线程上执行
+         */
+        @Override
+        public String call() throws Exception {
+            Long start = System.currentTimeMillis();
+            
+            //do post
+            HttpClientUtils.post(textMsg, outgoingUrl);
+            
+            return "Task Of Outgoing Post finished, it cost time：" + (System.currentTimeMillis() - start);
+        }
+    }
+    
+    
+ 
 
 
     /**
