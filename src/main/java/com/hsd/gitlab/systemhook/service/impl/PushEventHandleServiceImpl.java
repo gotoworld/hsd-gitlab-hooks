@@ -5,17 +5,18 @@
 package com.hsd.gitlab.systemhook.service.impl;
 
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.List;
 
 import javax.annotation.Resource;
 
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
+import org.apache.http.HttpEntity;
 import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpPost;
 import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
@@ -99,11 +100,8 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         if(! outgoingList.isEmpty()){
             for(SysOutgoingGroup outgoingGroup : outgoingList){
                 if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
-                    HttpClient httpclient = HttpClients.createDefault();
                     
-                    HttpPost httppost = new HttpPost(outgoingGroup.getIm_url());
-                    httppost.addHeader("Content-Type", "application/json; charset=utf-8");
-                    
+                    //2.2.1 compose message
                     String textMsg = "";
                     if(IMType.dingtalk.equals(outgoingGroup.getImType())){
                         event.toDingTalkMarkdown();
@@ -113,18 +111,57 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                         //TODO
                     }
                     
-                    StringEntity se = new StringEntity(textMsg, "utf-8");
-                    httppost.setEntity(se);
-                    
-                    HttpResponse response = httpclient.execute(httppost);
-                    if (response.getStatusLine().getStatusCode()== HttpStatus.SC_OK){
-                        String result= EntityUtils.toString(response.getEntity(), "utf-8");
-                        logger.info(result);
-                    } 
+                    //2.2.2 post message
+                    post(textMsg, outgoingGroup.getIm_url());
                 }
             }
         }
     }
+    
+    
+    /** 
+     * 
+     * Method Description
+     * @version Oct 9, 20175:14:27 PM
+     * @author Ford.CHEN
+     * @param textMsg
+     * @param outgoingUrl
+     */
+    private void post(String textMsg, String outgoingUrl) {  
+        // 创建默认的httpClient实例.    
+        CloseableHttpClient httpclient = HttpClients.createDefault();  
+        // 创建httppost    
+        HttpPost httppost = new HttpPost(outgoingUrl);  
+        
+        // 创建参数队列    
+        StringEntity se = new StringEntity(textMsg, "utf-8");
+        try {  
+            httppost.setEntity(se);  
+            logger.info("executing request --> {}", httppost.getURI());  
+            CloseableHttpResponse response = httpclient.execute(httppost);  
+            try {  
+                HttpEntity entity = response.getEntity();  
+                if (entity != null) {  
+                    logger.info(EntityUtils.toString(entity, "UTF-8"));
+                }  
+            } finally {  
+                response.close();  
+            }  
+        } catch (ClientProtocolException e) {  
+            logger.error("Outgoing PushEvent with ClientProtocolException ", e); 
+        } catch (UnsupportedEncodingException e) {  
+            logger.error("Outgoing PushEvent with UnsupportedEncodingException ", e);   
+        } catch (IOException e) {  
+            logger.error("Outgoing PushEvent with IOException ", e);   
+        } finally {  
+            // 关闭连接,释放资源    
+            try {  
+                httpclient.close();  
+            } catch (IOException e) {  
+                logger.error("Outgoing PushEvent with IOException ", e);  
+            }  
+        }
+    }  
 
 
     /**
