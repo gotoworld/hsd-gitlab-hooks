@@ -85,7 +85,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         //持久化 SysProject
         EntityWrapper<SysProject> projectWrapper = new EntityWrapper<SysProject>();
         Project projectDto = event.getProject();
-        projectWrapper.eq("name",projectDto.getPathWithNamespace());
+        projectWrapper.eq("name",projectDto.getName());
         SysProject project = sysProjectService.selectOne(projectWrapper);
         
         
@@ -146,7 +146,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         push.setEventName(event.getEventName());;
         push.setRef(event.getRef());
         push.setCheckoutSha(event.getCheckoutSha());
-        push.setMessage(message);
+        push.setMessage(event.getMessage());
         push.setBefore(event.getBefore());
         push.setAfter(event.getAfter());
         push.setAuthorId(author.getId());
@@ -166,38 +166,47 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                sysRPushCommitMapper.insert(rPushCommit);
            }
         }
-        
-        
-        
-        
-        
     }
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    
+
+
+    /**
+     * @param sysAuthorService the sysAuthorService to set
+     */
+    public void setSysAuthorService(SysAuthorServiceImpl sysAuthorService) {
+        this.sysAuthorService = sysAuthorService;
+    }
+
+
+    /**
+     * @param sysProjectService the sysProjectService to set
+     */
+    public void setSysProjectService(SysProjectServiceImp sysProjectService) {
+        this.sysProjectService = sysProjectService;
+    }
+
+
+    /**
+     * @param sysHookPushService the sysHookPushService to set
+     */
+    public void setSysHookPushService(SysHookPushServiceImp sysHookPushService) {
+        this.sysHookPushService = sysHookPushService;
+    }
+
+
+    /**
+     * @param sysRPushCommitMapper the sysRPushCommitMapper to set
+     */
+    public void setSysRPushCommitMapper(SysRPushCommitMapper sysRPushCommitMapper) {
+        this.sysRPushCommitMapper = sysRPushCommitMapper;
+    }
+
+
+    /**
+     * @param sysCommitServiceImpl the sysCommitServiceImpl to set
+     */
+    public void setSysCommitServiceImpl(SysCommitServiceImpl sysCommitServiceImpl) {
+        this.sysCommitServiceImpl = sysCommitServiceImpl;
+    }
     
     
     
