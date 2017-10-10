@@ -29,7 +29,7 @@ public class SysOutgoingGroupMapperTest extends BaseJunit {
     public void testSave(){
         SysOutgoingGroup outgoing = new SysOutgoingGroup(); 
         outgoing.setGitlabGroupName("infrastructure");
-        outgoing.setIm_url("https://oapi.dingtalk.com/robot/send?access_token=dd3cfd11d2169fea3a897fe7fb8a59a806e8dc42239a917269a1d3cdc0d94ca4");
+        outgoing.setImUrl("https://oapi.dingtalk.com/robot/send?access_token=dd3cfd11d2169fea3a897fe7fb8a59a806e8dc42239a917269a1d3cdc0d94ca4");
         outgoing.setImType(IMType.dingtalk);
         
         mapper.insert(outgoing);

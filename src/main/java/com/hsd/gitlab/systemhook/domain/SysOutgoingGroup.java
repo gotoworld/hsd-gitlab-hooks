@@ -14,7 +14,7 @@ public class SysOutgoingGroup extends IdEntity {
     
     private String gitlabGroupName;
     private IMType imType;
-    private String im_url;
+    private String imUrl;
     
     
     /**
@@ -42,20 +42,16 @@ public class SysOutgoingGroup extends IdEntity {
         this.imType = imType;
     }
     /**
-     * @return the im_url
+     * @return the imUrl
      */
-    public String getIm_url() {
-        return im_url;
+    public String getImUrl() {
+        return imUrl;
     }
     /**
-     * @param im_url the im_url to set
+     * @param imUrl the imUrl to set
      */
-    public void setIm_url(String im_url) {
-        this.im_url = im_url;
+    public void setImUrl(String imUrl) {
+        this.imUrl = imUrl;
     }
-    
-
-
-    
     
 }

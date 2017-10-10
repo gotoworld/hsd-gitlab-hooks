@@ -102,7 +102,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                     //2.2.1 compose message
                     String textMsg = "";
                     if(IMType.dingtalk.equals(outgoingGroup.getImType())){
-                        event.toDingTalkMarkdown();
+                        textMsg = event.toDingTalkMarkdown();
                     }else if(IMType.slack.equals(outgoingGroup.getImType())){
                         //TODO FOR Slack
                     }else{
@@ -110,7 +110,8 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                     }
                     
                     //2.2.2 post message, multi-thread asynchronous
-                    executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getIm_url()));   
+                    HttpClientUtils.post(textMsg, outgoingGroup.getImUrl());
+                    executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   
                 }
             }
         }

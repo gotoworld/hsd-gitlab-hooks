@@ -40,7 +40,8 @@ public class HttpClientUtils {
         // 创建默认的httpClient实例.    
         CloseableHttpClient httpclient = HttpClients.createDefault();  
         // 创建httppost    
-        HttpPost httppost = new HttpPost(outgoingUrl);  
+        HttpPost httppost = new HttpPost(outgoingUrl); 
+        httppost.addHeader("Content-Type", "application/json; charset=utf-8");
         
         // 创建参数队列    
         StringEntity se = new StringEntity(textMsg, "utf-8");

@@ -7,6 +7,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.junit.Test;
+
+import com.hsd.gitlab.utils.HttpClientUtils;
  
  
 public class ChatbotSend {
@@ -92,5 +94,19 @@ public class ChatbotSend {
             String result= EntityUtils.toString(response.getEntity(), "utf-8");
             System.out.println(result);
         } 
+    }
+    
+    /**
+     * 
+     * Method Description
+     * @version Oct 10, 20178:44:12 AM
+     * @author Ford.CHEN
+     * @throws Exception
+     */
+    @Test
+    public void markdownMessageByUtils() throws Exception{
+        String textMsg = "{ \"msgtype\": \"markdown\", \"markdown\": {\"title\": \"杭州天气\", \"text\":\"#### 杭州天气 @156xxxx8827\\n   > 9度，西北风1级，\\n\\n   > 空气良89，相对温度73%\\n\\n   > ![screenshot](http://www.baidu.com/img/bd_logo1.png)\\n  > ###### 10点20分发布 [天气](http://www.thinkpage.cn/) \\n\"}}";
+        
+        HttpClientUtils.post(textMsg, WEBHOOK_TOKEN);
     }
 }
