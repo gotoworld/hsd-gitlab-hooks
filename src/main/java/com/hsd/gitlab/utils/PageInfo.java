@@ -81,74 +81,128 @@ public class PageInfo {
         this.order = order;
     }
 
+    /**
+     * @return the total
+     */
     public int getTotal() {
         return total;
     }
 
+    /**
+     * @param total the total to set
+     */
     public void setTotal(int total) {
         this.total = total;
     }
 
+    /**
+     * @return the rows
+     */
     public List getRows() {
         return rows;
     }
 
+    /**
+     * @param rows the rows to set
+     */
     public void setRows(List rows) {
         this.rows = rows;
     }
 
+    /**
+     * @return the from
+     */
     public int getFrom() {
         return from;
     }
 
+    /**
+     * @param from the from to set
+     */
     public void setFrom(int from) {
         this.from = from;
     }
 
+    /**
+     * @return the size
+     */
     public int getSize() {
         return size;
     }
 
+    /**
+     * @param size the size to set
+     */
     public void setSize(int size) {
         this.size = size;
     }
 
+    /**
+     * @return the nowpage
+     */
     public int getNowpage() {
         return nowpage;
     }
 
+    /**
+     * @param nowpage the nowpage to set
+     */
     public void setNowpage(int nowpage) {
         this.nowpage = nowpage;
     }
 
+    /**
+     * @return the pagesize
+     */
     public int getPagesize() {
         return pagesize;
     }
 
+    /**
+     * @param pagesize the pagesize to set
+     */
     public void setPagesize(int pagesize) {
         this.pagesize = pagesize;
     }
 
+    /**
+     * @return the condition
+     */
     public Map<String, Object> getCondition() {
         return condition;
     }
 
+    /**
+     * @param condition the condition to set
+     */
     public void setCondition(Map<String, Object> condition) {
         this.condition = condition;
     }
 
+    /**
+     * @return the sort
+     */
     public String getSort() {
         return sort;
     }
 
+    /**
+     * @param sort the sort to set
+     */
     public void setSort(String sort) {
         this.sort = sort;
     }
 
+    /**
+     * @return the order
+     */
     public String getOrder() {
         return order;
     }
 
+    /**
+     * @param order the order to set
+     */
     public void setOrder(String order) {
         this.order = order;
     }

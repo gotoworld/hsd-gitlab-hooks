@@ -45,7 +45,7 @@ logging:
   file: hsd-devops-console.log
 
 hooktools:
-  swagger-open: false #是否开启swagger (true/false)
+  swagger-open: true #是否开启swagger (true/false)
   
   
 mybatis-plus:

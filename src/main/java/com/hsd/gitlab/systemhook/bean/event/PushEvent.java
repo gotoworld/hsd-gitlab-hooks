@@ -1,6 +1,5 @@
 package com.hsd.gitlab.systemhook.bean.event;
 import java.util.List;
-import java.util.Locale;
 
 import org.joda.time.DateTime;
 
@@ -137,7 +136,8 @@ public class PushEvent extends BaseEvent {
 //           String cid = commit.getId().substring(0, 7);
            
            DateTime dateTime = new DateTime(commit.getTimestamp());
-           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() + ", " + dateTime.toString("yyyy/MM/dd HH:mm:ss EE",Locale.ENGLISH) +  "\\n\\n   ";
+//           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  "\\n\\n   ";
+           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() +  "\\n\\n   ";
        }
        sb.append(content);
        
