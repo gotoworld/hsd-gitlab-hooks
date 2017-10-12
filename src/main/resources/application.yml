@@ -4,7 +4,7 @@ spring:
   profiles:
     active: dev
   jackson: 
-    property-naming-strategy: CAMEL_CASE_TO_LOWER_CASE_WITH_UNDERSCORES 
+    property-naming-strategy: LOWER_CAMEL_CASE 
   datasource:
       url: jdbc:mysql://192.168.254.246:3308/webhooks?autoReconnect=true&useUnicode=true&characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
       username: root
