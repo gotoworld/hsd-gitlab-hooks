@@ -3,7 +3,7 @@ package com.hsd.gitlab.utils;
 import java.util.List;
 import java.util.Map;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hsd.gitlab.type.IMType;
 
 /**
  * 
@@ -19,22 +19,21 @@ public class PageInfo {
     private int total; // 总记录 
     private List rows; //显示的记录  
 
-    @JsonIgnore
     private int from;
-    @JsonIgnore
+    
     private int size;
-    @JsonIgnore
+    
     private int nowpage; // 当前页 
-    @JsonIgnore
+    
     private int pagesize; // 每页显示的记录数 
-    @JsonIgnore
+    
     private Map<String, Object> condition; //查询条件
 
-    @JsonIgnore
     private String sort = "id";// 排序字段
     
-    @JsonIgnore
     private String order = "asc";// asc，desc mybatis Order 关键字
+    
+    private IMType imType;
 
     public PageInfo() {}
 
@@ -206,4 +205,38 @@ public class PageInfo {
     public void setOrder(String order) {
         this.order = order;
     }
+
+    /**
+     * @return the imType
+     */
+    public IMType getImType() {
+        return imType;
+    }
+
+    /**
+     * @param imType the imType to set
+     */
+    public void setImType(IMType imType) {
+        this.imType = imType;
+    }
+    
+    
+    private String gitlabGroupName;
+
+    /**
+     * @return the gitlabGroupName
+     */
+    public String getGitlabGroupName() {
+        return gitlabGroupName;
+    }
+
+    /**
+     * @param gitlabGroupName the gitlabGroupName to set
+     */
+    public void setGitlabGroupName(String gitlabGroupName) {
+        this.gitlabGroupName = gitlabGroupName;
+    }
+    
+    
+    
 }

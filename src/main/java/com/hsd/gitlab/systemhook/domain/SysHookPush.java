@@ -1,5 +1,7 @@
 package com.hsd.gitlab.systemhook.domain;
 
+import java.util.Date;
+
 import com.hsd.gitlab.type.SystemEventNames;
 
 /**
@@ -28,6 +30,7 @@ public class SysHookPush extends IdEntity {
     
     private Long totalCommitsCount;
     
+    private Date eventTime;
     
     
 
@@ -171,6 +174,18 @@ public class SysHookPush extends IdEntity {
         this.projectId = projectId;
     }
 
-    
+    /**
+     * @return the eventTime
+     */
+    public Date getEventTime() {
+        return eventTime;
+    }
+
+    /**
+     * @param eventTime the eventTime to set
+     */
+    public void setEventTime(Date eventTime) {
+        this.eventTime = eventTime;
+    }
     
 }

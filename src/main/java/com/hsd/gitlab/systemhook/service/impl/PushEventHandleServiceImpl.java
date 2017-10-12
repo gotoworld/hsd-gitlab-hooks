@@ -6,6 +6,7 @@ package com.hsd.gitlab.systemhook.service.impl;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
@@ -110,7 +111,6 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                     }
                     
                     //2.2.2 post message, multi-thread asynchronous
-                    HttpClientUtils.post(textMsg, outgoingGroup.getImUrl());
                     executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   
                 }
             }
@@ -246,6 +246,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         push.setAuthorId(author.getId());
         push.setProjectId(project.getId());
         push.setTotalCommitsCount(event.getTotalCommitsCount());
+        push.setEventTime(new Date());
        
         
         sysHookPushService.insert(push);

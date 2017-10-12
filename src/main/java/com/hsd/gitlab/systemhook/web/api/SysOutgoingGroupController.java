@@ -8,7 +8,7 @@ import javax.annotation.Resource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -38,11 +38,33 @@ public class SysOutgoingGroupController {
     SysOutgoingGroupServiceImpl sysOutgoingGroupService;
     
     
+    /**
+     * 
+     * Method Description
+     * @version Oct 11, 20173:17:44 PM
+     * @author Ford.CHEN
+     * @param group
+     */
+    @ApiOperation(value="Create a Group level of Outgoing", notes="Create a Group level of Outgoing")
+    @ApiImplicitParam(name = "sysOutgoingGroup", value = "SysOutgoingGroup to be create", required = true, dataType = "SysOutgoingGroup")
+    @PostMapping("/test")
+    public void create(@RequestBody SysOutgoingGroup sysOutgoingGroup){
+        sysOutgoingGroupService.insert(sysOutgoingGroup);
+    }
+    
+    /**
+     * 
+     * Method Description
+     * @version Oct 11, 20173:05:03 PM
+     * @author Ford.CHEN
+     * @param pageInfo
+     * @return
+     */
     @ApiOperation(value="Group level of Outgoing", notes="Group level of Outgoing page list")
     @ApiImplicitParam(name = "pageInfo", value = "分页DTO", required = true, dataType = "PageInfo")
-    @GetMapping("/list")
+    @PostMapping("/list")
     public PageInfo list(@RequestBody PageInfo pageInfo){
-        Page<SysOutgoingGroup> page = new Page<SysOutgoingGroup>(pageInfo.getNowpage(), pageInfo.getSize());
+        Page<SysOutgoingGroup> page = new Page<SysOutgoingGroup>(pageInfo.getNowpage(), pageInfo.getPagesize());
         
         EntityWrapper<SysOutgoingGroup> wrapper = new EntityWrapper<SysOutgoingGroup>();
         wrapper.orderBy(pageInfo.getSort(), pageInfo.getOrder().equalsIgnoreCase("ASC"));
@@ -56,5 +78,4 @@ public class SysOutgoingGroupController {
         
         return pageInfo;
     }
-    
 }

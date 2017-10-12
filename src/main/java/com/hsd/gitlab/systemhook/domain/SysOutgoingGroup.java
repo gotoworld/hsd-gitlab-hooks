@@ -1,5 +1,11 @@
 package com.hsd.gitlab.systemhook.domain;
 
+import java.io.IOException;
+
+import com.alibaba.fastjson.JSON;
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hsd.gitlab.type.IMType;
 
 /**
@@ -15,6 +21,17 @@ public class SysOutgoingGroup extends IdEntity {
     private String gitlabGroupName;
     private IMType imType;
     private String imUrl;
+    
+    public static void main(String[] args) throws JsonParseException, JsonMappingException, IOException {
+        String s = "{ \"gitlabGroupName\": \"nameof s\",  \"id\": 0,\"imType\": \"dingtalk\",\"imUrl\": \"string\" }";
+        SysOutgoingGroup page = JSON.parseObject(s, SysOutgoingGroup.class);
+        System.out.println(page.getGitlabGroupName());
+        
+        ObjectMapper objectMapper = new ObjectMapper();
+        SysOutgoingGroup acc = objectMapper.readValue(s, SysOutgoingGroup.class);
+        
+        System.out.println(page.getGitlabGroupName());
+    }
     
     
     /**
