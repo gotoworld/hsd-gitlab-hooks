@@ -50,11 +50,11 @@ public class SysOutgoingGroupController {
      */
     @ApiOperation(value="Create a Group level of Outgoing", notes="Create a Group level of Outgoing")
     @ApiImplicitParam(name = "sysOutgoingGroup", value = "SysOutgoingGroup to be create", required = true, dataType = "SysOutgoingGroup")
-    @PostMapping("")
-    public ResVo<BaseVO> create(@RequestBody SysOutgoingGroup sysOutgoingGroup){
-        logger.info("receied groud create:{}",sysOutgoingGroup);
+    @PostMapping("/add")
+    public ResVo<BaseVO> addOrEdit(@RequestBody SysOutgoingGroup sysOutgoingGroup){
+        logger.info("receied groud create or update:{}",sysOutgoingGroup);
         
-        boolean result = sysOutgoingGroupService.insert(sysOutgoingGroup);
+        boolean result = sysOutgoingGroupService.insertOrUpdate(sysOutgoingGroup);
         
         return composeResVO(result);
     }
@@ -77,6 +77,17 @@ public class SysOutgoingGroupController {
         return resVO;
     }
     
+    
+    @ApiOperation(value="info Group level of Outgoing", notes="Info Group level of Outgoing")
+    @ApiImplicitParam(name = "outgoinggroupId", value = "outgoinggroupId", required = false, dataType = "Long")
+    @PostMapping("")
+    public SysOutgoingGroup info(@RequestBody Long outgoinggroupId){
+        
+        SysOutgoingGroup group = sysOutgoingGroupService.selectById(outgoinggroupId);
+        
+        return group;
+    }
+    
     /**
      * 
      * Method Description
@@ -86,7 +97,7 @@ public class SysOutgoingGroupController {
      * @return
      */
     @ApiOperation(value="Group level of Outgoing", notes="Group level of Outgoing page list")
-    @ApiImplicitParam(name = "pageInfo", value = "分页DTO", required = true, dataType = "PageInfo")
+    @ApiImplicitParam(name = "page", value = "分页DTO", required = true, dataType = "Page<SysOutgoingGroup>")
     @PostMapping("/list")
     public Page<SysOutgoingGroup> list(@RequestBody Page<SysOutgoingGroup> page){
         
@@ -100,31 +111,14 @@ public class SysOutgoingGroupController {
     }
     
     
-/*    *//**
-     * 
-     * Method Description
-     * @version Oct 11, 20173:05:03 PM
-     * @author Ford.CHEN
-     * @param pageInfo
-     * @return
-     *//*
-    @ApiOperation(value="Group level of Outgoing", notes="Group level of Outgoing page list")
-    @ApiImplicitParam(name = "pageInfo", value = "分页DTO", required = true, dataType = "PageInfo")
-    @PostMapping("/list")
-    public PageInfo list(@RequestBody Page<Object> page){
-        Page<SysOutgoingGroup> page = new Page<SysOutgoingGroup>(pageInfo.getNowpage(), pageInfo.getPagesize());
+    @ApiOperation(value="Remove Group level of Outgoing", notes="Remove Group level of Outgoing")
+    @ApiImplicitParam(name = "outgoinggroupId", value = "outgoinggroupId", required = true, dataType = "Long")
+    @PostMapping("/delete")
+    public ResVo<BaseVO> delete(@RequestBody Long outgoinggroupId){
         
-        EntityWrapper<SysOutgoingGroup> wrapper = new EntityWrapper<SysOutgoingGroup>();
-        wrapper.orderBy(pageInfo.getSort(), pageInfo.getOrder().equalsIgnoreCase("ASC"));
+        boolean result = sysOutgoingGroupService.deleteById(outgoinggroupId);
         
-        
-        SqlHelper.fillWrapper(page, wrapper);
-        page.setRecords(sysOutgoingGroupService.selectPage(page, wrapper).getRecords());
-        
-        pageInfo.setRows(page.getRecords());
-        pageInfo.setTotal(page.getTotal());
-        
-        return pageInfo;
+        return composeResVO(result);
     }
-*/
+    
 }
