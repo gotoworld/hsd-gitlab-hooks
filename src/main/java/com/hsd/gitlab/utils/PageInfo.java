@@ -3,8 +3,6 @@ package com.hsd.gitlab.utils;
 import java.util.List;
 import java.util.Map;
 
-import com.hsd.gitlab.type.IMType;
-
 /**
  * 
  * Class Description
@@ -33,7 +31,6 @@ public class PageInfo {
     
     private String order = "asc";// asc，desc mybatis Order 关键字
     
-    private IMType imType;
 
     public PageInfo() {}
 
@@ -206,37 +203,6 @@ public class PageInfo {
         this.order = order;
     }
 
-    /**
-     * @return the imType
-     */
-    public IMType getImType() {
-        return imType;
-    }
-
-    /**
-     * @param imType the imType to set
-     */
-    public void setImType(IMType imType) {
-        this.imType = imType;
-    }
-    
-    
-    private String gitlabGroupName;
-
-    /**
-     * @return the gitlabGroupName
-     */
-    public String getGitlabGroupName() {
-        return gitlabGroupName;
-    }
-
-    /**
-     * @param gitlabGroupName the gitlabGroupName to set
-     */
-    public void setGitlabGroupName(String gitlabGroupName) {
-        this.gitlabGroupName = gitlabGroupName;
-    }
-    
     
     
 }
