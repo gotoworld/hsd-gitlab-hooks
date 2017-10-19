@@ -11,7 +11,8 @@ public enum IMType {
     dingtalk("钉钉"),
     slack("Slack"),
     bearychat("倍洽"),
-    weixin("微信");
+    weixin("微信"),
+    jenkins("Jenkins");
 
     private String value;
 
