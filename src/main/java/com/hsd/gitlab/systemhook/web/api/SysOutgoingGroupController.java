@@ -77,7 +77,14 @@ public class SysOutgoingGroupController {
         return resVO;
     }
     
-    
+    /**
+     * 
+     * Method Description
+     * @version Oct 20, 20175:18:59 PM
+     * @author Ford.CHEN
+     * @param outgoinggroupId
+     * @return
+     */
     @ApiOperation(value="info Group level of Outgoing", notes="Info Group level of Outgoing")
     @ApiImplicitParam(name = "outgoinggroupId", value = "outgoinggroupId", required = false, dataType = "Long")
     @PostMapping("")
@@ -111,6 +118,14 @@ public class SysOutgoingGroupController {
     }
     
     
+    /**
+     * 
+     * Method Description
+     * @version Oct 20, 20175:18:53 PM
+     * @author Ford.CHEN
+     * @param outgoinggroupId
+     * @return
+     */
     @ApiOperation(value="Remove Group level of Outgoing", notes="Remove Group level of Outgoing")
     @ApiImplicitParam(name = "outgoinggroupId", value = "outgoinggroupId", required = true, dataType = "Long")
     @PostMapping("/delete")
