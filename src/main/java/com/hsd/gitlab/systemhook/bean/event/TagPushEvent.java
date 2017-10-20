@@ -57,7 +57,7 @@ public class TagPushEvent extends BaseEvent {
     private String ref;
     private String checkoutSha;
     private Long userId;
-    private String userName;
+    private String userName;//陈
     private String userAvatar;
     private int projectId;
     
@@ -67,6 +67,14 @@ public class TagPushEvent extends BaseEvent {
     private List<String> commits;
     
     private int totalCommitsCount;
+    
+    //new version add
+    private String objectKind;//PS001: gitlab offical api document don't have this, but the message have it
+    private String message;//same as PS001: 
+    private String userUsername; //ford， same as PS001: 
+    private String userEmail;//same as PS001:
+    
+    
 
     /**
      * @return the before
@@ -235,6 +243,62 @@ public class TagPushEvent extends BaseEvent {
      */
     public void setTotalCommitsCount(int totalCommitsCount) {
         this.totalCommitsCount = totalCommitsCount;
+    }
+
+    /**
+     * @return the objectKind
+     */
+    public String getObjectKind() {
+        return objectKind;
+    }
+
+    /**
+     * @param objectKind the objectKind to set
+     */
+    public void setObjectKind(String objectKind) {
+        this.objectKind = objectKind;
+    }
+
+    /**
+     * @return the message
+     */
+    public String getMessage() {
+        return message;
+    }
+
+    /**
+     * @param message the message to set
+     */
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    /**
+     * @return the userUsername
+     */
+    public String getUserUsername() {
+        return userUsername;
+    }
+
+    /**
+     * @param userUsername the userUsername to set
+     */
+    public void setUserUsername(String userUsername) {
+        this.userUsername = userUsername;
+    }
+
+    /**
+     * @return the userEmail
+     */
+    public String getUserEmail() {
+        return userEmail;
+    }
+
+    /**
+     * @param userEmail the userEmail to set
+     */
+    public void setUserEmail(String userEmail) {
+        this.userEmail = userEmail;
     }
     
 
