@@ -11,8 +11,7 @@
 		</encoder>
 		<Target>System.out</Target>
 		<encoder>
-			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level
-				%logger{80} [%file : %line] %msg%n</pattern>
+			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level	%logger{80} [%file : %line] %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -25,8 +24,7 @@
 		<file>logs/hooktools/all.log</file>
 		<append>true</append>
 		<encoder>
-			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level
-				%logger{80} [%file : %line] %msg%n</pattern>
+			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{80} [%file : %line] %msg%n</pattern>
 		</encoder>
 	</appender>
 
@@ -38,8 +36,7 @@
 			<charset>UTF-8</charset>
 		</encoder>
 		<encoder>
-			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level
-				%logger{80} [%file : %line] %msg%n</pattern>
+			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{80} [%file : %line] %msg%n</pattern>
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>logs/hooktools/all.%d{yyyy-MM-dd}.log
@@ -58,8 +55,7 @@
 		<file>logs/hooktools/err.log</file>
 		<append>true</append>
 		<encoder>
-			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level
-				%logger{80} [%file : %line] %msg%n</pattern>
+			<pattern>[hooktools] %d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{80} [%file : %line] %msg%n</pattern>
 		</encoder>
 		<rollingPolicy class="ch.qos.logback.core.rolling.FixedWindowRollingPolicy">
 			<fileNamePattern>logs/hooktools/err.%i.log</fileNamePattern>

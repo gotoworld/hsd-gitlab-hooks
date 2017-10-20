@@ -40,7 +40,7 @@ swagger:
         developer: systemhook
 
 logging:
-  level.root: warn
+  level.root: info
   path: logs/
   file: hsd-devops-console.log
 
