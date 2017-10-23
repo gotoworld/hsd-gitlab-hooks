@@ -42,7 +42,7 @@ swagger:
 logging:
   level.root: info
   path: logs/
-  file: hsd-devops-console.log
+  config: classpath:logging-config.xml
 
 hooktools:
   swagger-open: true #是否开启swagger (true/false)
