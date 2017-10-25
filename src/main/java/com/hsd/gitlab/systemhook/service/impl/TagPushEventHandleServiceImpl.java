@@ -54,15 +54,12 @@ public class TagPushEventHandleServiceImpl implements EventHandleService {
                 if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
                     
                     //2.2.1 compose message
-                    String textMsg = "";
                     if(IMType.jenkins.equals(outgoingGroup.getImType())){
-                        textMsg = message;
-                    }else{
-                        //TODO
+                        String textMsg = message;
+                        executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   
                     }
                     
                     //2.2.2 post message, multi-thread asynchronous
-                    executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   
                 }
             }
         }

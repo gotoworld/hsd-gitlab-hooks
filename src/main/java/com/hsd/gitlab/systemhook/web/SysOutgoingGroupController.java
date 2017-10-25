@@ -2,7 +2,7 @@
  * Copyright 2017-2020 the original author: Ford.CHEN
  *
  */
-package com.hsd.gitlab.systemhook.web.api;
+package com.hsd.gitlab.systemhook.web;
 
 import javax.annotation.Resource;
 

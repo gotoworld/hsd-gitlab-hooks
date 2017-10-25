@@ -42,7 +42,7 @@ swagger:
 logging:
   level.root: info
   path: logs/
-  config: classpath:logging-config.xml
+  config: classpath:logback-spring.xml
 
 hooktools:
   swagger-open: true #是否开启swagger (true/false)
