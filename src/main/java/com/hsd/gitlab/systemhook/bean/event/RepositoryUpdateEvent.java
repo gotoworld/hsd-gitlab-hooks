@@ -4,6 +4,8 @@ import java.util.List;
 import com.hsd.gitlab.systemhook.bean.Changes;
 import com.hsd.gitlab.systemhook.bean.Project;
 
+import lombok.Data;
+
 /**
  * 
  *  *{
@@ -44,6 +46,7 @@ import com.hsd.gitlab.systemhook.bean.Project;
  * @version Sep 27, 201711:55:40 AM
  * @author Ford.CHEN
  */
+@Data
 public class RepositoryUpdateEvent extends BaseEvent {
 
     private Long userId;
@@ -56,118 +59,5 @@ public class RepositoryUpdateEvent extends BaseEvent {
     private List<Changes> changes;
     
     private List<String> refs;
-
-    /**
-     * @return the userId
-     */
-    public Long getUserId() {
-        return userId;
-    }
-
-    /**
-     * @param userId the userId to set
-     */
-    public void setUserId(Long userId) {
-        this.userId = userId;
-    }
-
-    /**
-     * @return the userName
-     */
-    public String getUserName() {
-        return userName;
-    }
-
-    /**
-     * @param userName the userName to set
-     */
-    public void setUserName(String userName) {
-        this.userName = userName;
-    }
-
-    /**
-     * @return the userEmail
-     */
-    public String getUserEmail() {
-        return userEmail;
-    }
-
-    /**
-     * @param userEmail the userEmail to set
-     */
-    public void setUserEmail(String userEmail) {
-        this.userEmail = userEmail;
-    }
-
-    /**
-     * @return the userAvatar
-     */
-    public String getUserAvatar() {
-        return userAvatar;
-    }
-
-    /**
-     * @param userAvatar the userAvatar to set
-     */
-    public void setUserAvatar(String userAvatar) {
-        this.userAvatar = userAvatar;
-    }
-
-    /**
-     * @return the projectId
-     */
-    public int getProjectId() {
-        return projectId;
-    }
-
-    /**
-     * @param projectId the projectId to set
-     */
-    public void setProjectId(int projectId) {
-        this.projectId = projectId;
-    }
-
-    /**
-     * @return the project
-     */
-    public Project getProject() {
-        return project;
-    }
-
-    /**
-     * @param project the project to set
-     */
-    public void setProject(Project project) {
-        this.project = project;
-    }
-
-    /**
-     * @return the changes
-     */
-    public List<Changes> getChanges() {
-        return changes;
-    }
-
-    /**
-     * @param changes the changes to set
-     */
-    public void setChanges(List<Changes> changes) {
-        this.changes = changes;
-    }
-
-    /**
-     * @return the refs
-     */
-    public List<String> getRefs() {
-        return refs;
-    }
-
-    /**
-     * @param refs the refs to set
-     */
-    public void setRefs(List<String> refs) {
-        this.refs = refs;
-    }
-    
 
 }

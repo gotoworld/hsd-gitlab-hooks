@@ -15,8 +15,6 @@ import java.util.concurrent.Executors;
 import javax.annotation.Resource;
 
 import org.apache.http.client.ClientProtocolException;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import com.alibaba.fastjson.JSON;
@@ -35,15 +33,16 @@ import com.hsd.gitlab.systemhook.service.EventHandleService;
 import com.hsd.gitlab.type.IMType;
 import com.hsd.gitlab.utils.HttpClientUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Class Description
  * @version Sep 28, 20176:48:58 PM
  * @author Ford.CHEN
  */
 @Service("pushEventHandleService")
+@Slf4j
 public class PushEventHandleServiceImpl implements EventHandleService {
-    
-    private final static Logger logger = LoggerFactory.getLogger(PushEventHandleServiceImpl.class);
     
     @Resource
     SysAuthorServiceImpl sysAuthorService;

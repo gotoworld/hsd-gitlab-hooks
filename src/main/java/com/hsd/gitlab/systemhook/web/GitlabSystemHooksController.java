@@ -7,8 +7,6 @@ package com.hsd.gitlab.systemhook.web;
 import javax.annotation.Resource;
 
 import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -19,6 +17,8 @@ import com.hsd.gitlab.systemhook.bean.event.BaseEvent;
 import com.hsd.gitlab.systemhook.service.EventHandleService;
 import com.hsd.gitlab.systemhook.service.impl.EventHandleServiceFactory;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Class Description
  * @version Sep 27, 20171:59:02 PM
@@ -26,9 +26,8 @@ import com.hsd.gitlab.systemhook.service.impl.EventHandleServiceFactory;
  */
 @RestController()
 @RequestMapping("/incoming")
+@Slf4j
 public class GitlabSystemHooksController {
-    
-    private final static Logger logger = LoggerFactory.getLogger(GitlabSystemHooksController.class);
     
     @Resource
     EventHandleServiceFactory eventHandleServiceFactory;
@@ -42,7 +41,7 @@ public class GitlabSystemHooksController {
      */
     @PostMapping(value = "/systemhooks", consumes = "application/json")
     public void trigger(@RequestBody String message) {
-        logger.info("received hooks message: {}", message);
+        log.info("received hooks message: {}", message);
         
         if(StringUtils.contains(message, "event_name")){
             BaseEvent event = JSON.parseObject(message, BaseEvent.class);
@@ -51,7 +50,7 @@ public class GitlabSystemHooksController {
             eventHandleService.handle(message);
         }
         
-        logger.info("Finished hooks message handle");
+        log.info("Finished hooks message handle");
     }
     
     

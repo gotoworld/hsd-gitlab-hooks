@@ -34,7 +34,7 @@ import io.swagger.annotations.ApiOperation;
 @RequestMapping("/api/outgoinggroup")
 public class SysOutgoingGroupController {
     
-    private final static Logger logger = LoggerFactory.getLogger(SysOutgoingGroupController.class);
+    private final static Logger log = LoggerFactory.getLogger(SysOutgoingGroupController.class);
     
     @Resource
     SysOutgoingGroupServiceImpl sysOutgoingGroupService;
@@ -52,7 +52,7 @@ public class SysOutgoingGroupController {
     @ApiImplicitParam(name = "sysOutgoingGroup", value = "SysOutgoingGroup to be create", required = true, dataType = "SysOutgoingGroup")
     @PostMapping("/add")
     public ResVo<BaseVO> addOrEdit(@RequestBody SysOutgoingGroup sysOutgoingGroup){
-        logger.info("receied groud create or update:{}",sysOutgoingGroup);
+        log.info("receied groud create or update:{}",sysOutgoingGroup);
         
         boolean result = sysOutgoingGroupService.insertOrUpdate(sysOutgoingGroup);
         

@@ -21,12 +21,15 @@ import com.hsd.gitlab.systemhook.service.EventHandleService;
 import com.hsd.gitlab.type.IMType;
 import com.hsd.gitlab.utils.HttpClientUtils;
 
+import lombok.extern.slf4j.Slf4j;
+
 /**
  * Class Description
  * @version Sep 28, 20176:48:58 PM
  * @author Ford.CHEN
  */
 @Service("tagPushEventHandleService")
+@Slf4j
 public class TagPushEventHandleServiceImpl implements EventHandleService {
     
     

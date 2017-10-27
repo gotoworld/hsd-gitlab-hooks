@@ -6,11 +6,14 @@ package com.hsd.gitlab.systemhook.domain;
 
 import java.util.Date;
 
+import lombok.Data;
+
 /**
  * Class Description
  * @version Jun 28, 20173:39:35 PM
  * @author Ford.CHEN
  */
+@Data
 public class AuditEntity extends IdEntity {
     private static final long serialVersionUID = -5602168898183027972L;
     
@@ -20,32 +23,4 @@ public class AuditEntity extends IdEntity {
     /** 创建时间 **/
     private Date createTime;
 
-    /**
-     * @return the createUserId
-     */
-    public Long getCreateUserId() {
-        return createUserId;
-    }
-
-    /**
-     * @param createUserId the createUserId to set
-     */
-    public void setCreateUserId(Long createUserId) {
-        this.createUserId = createUserId;
-    }
-
-    /**
-     * @return the createTime
-     */
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    /**
-     * @param createTime the createTime to set
-     */
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-    
 }
