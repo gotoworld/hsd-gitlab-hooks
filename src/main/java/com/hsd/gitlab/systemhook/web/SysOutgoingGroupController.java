@@ -6,8 +6,6 @@ package com.hsd.gitlab.systemhook.web;
 
 import javax.annotation.Resource;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -24,6 +22,7 @@ import com.hsd.gitlab.systemhook.vo.ResVo;
 
 import io.swagger.annotations.ApiImplicitParam;
 import io.swagger.annotations.ApiOperation;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  * Class Description
@@ -32,9 +31,8 @@ import io.swagger.annotations.ApiOperation;
  */
 @RestController
 @RequestMapping("/api/outgoinggroup")
+@Slf4j
 public class SysOutgoingGroupController {
-    
-    private final static Logger log = LoggerFactory.getLogger(SysOutgoingGroupController.class);
     
     @Resource
     SysOutgoingGroupServiceImpl sysOutgoingGroupService;

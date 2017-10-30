@@ -9,6 +9,7 @@ import com.hsd.gitlab.systemhook.bean.Project;
 import com.hsd.gitlab.systemhook.bean.Repository;
 
 import lombok.Data;
+import lombok.extern.slf4j.Slf4j;
 
 /**
  *
@@ -84,6 +85,7 @@ import lombok.Data;
  * @author Ford.CHEN
  */
 @Data
+@Slf4j
 public class PushEvent extends BaseEvent {
 
     private String objectKind;//PS001: gitlab offical api document don't have this, but the message have it
@@ -170,18 +172,20 @@ public class PushEvent extends BaseEvent {
            branch = s[2];
        }
        
-       String title = "" + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       String title = "" + username + "  pushed to  " + project.getName()+ ":" + branch + " \n";
        sb.append(title);
        
        
        String content= ""; 
        for(Commits commit : commits){
            DateTime dateTime = new DateTime(commit.getTimestamp());
-           content = content + "<" + commit.getUrl() + "|" + commit.getMessage() + "> , " + commit.getAuthor().getName() + ", " + dateTime.toString("HH:mm EE",Locale.ENGLISH) +  "\n   ";
+           content = content + "<" + commit.getUrl() + "|" + commit.getMessage().replace("\n", "") + "> , " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  " \n ";
        }
        sb.append(content);
        
        sb.append(" \"}");
+       
+       log.debug("to Slack message: {}",sb.toString());
         
         return sb.toString();
     }
