@@ -104,10 +104,12 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                     if(IMType.dingtalk.equals(outgoingGroup.getImType())){
                         textMsg = event.toDingTalkMarkdown();
                     }else if(IMType.slack.equals(outgoingGroup.getImType())){
-                        //TODO FOR Slack
+                        textMsg = event.toSlackJson();
                     }else{
                         //TODO
                     }
+                    
+                    log.debug("push event message is composed: {}",textMsg);
                     
                     //2.2.2 post message, multi-thread asynchronous
                     executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   

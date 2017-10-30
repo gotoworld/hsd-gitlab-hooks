@@ -151,4 +151,39 @@ public class PushEvent extends BaseEvent {
     }
     
     
+    
+    /**
+     * 
+     * payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
+     * @version Oct 30, 20179:15:07 AM
+     * @author Ford.CHEN
+     * @return
+     */
+    public String toSlackJson(){
+        
+       StringBuffer sb = new StringBuffer();
+       sb.append("{\"text\": \"");
+        
+       String branch = "";
+       String[] s = ref.split("\\/");
+       if(s.length == 3){
+           branch = s[2];
+       }
+       
+       String title = "" + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       sb.append(title);
+       
+       
+       String content= ""; 
+       for(Commits commit : commits){
+           DateTime dateTime = new DateTime(commit.getTimestamp());
+           content = content + "<" + commit.getUrl() + "|" + commit.getMessage() + "> , " + commit.getAuthor().getName() + ", " + dateTime.toString("HH:mm EE",Locale.ENGLISH) +  "\n   ";
+       }
+       sb.append(content);
+       
+       sb.append(" \"}");
+        
+        return sb.toString();
+    }
+    
 }
