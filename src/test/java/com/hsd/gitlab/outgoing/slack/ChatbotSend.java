@@ -54,7 +54,9 @@ public class ChatbotSend {
         
         PushEvent event = new PushEvent();
         event.setUsername("Uname.CHEN");
+        event.setUserUsername("linzhiyong");
         event.setRef("ref/orgin/master");
+        event.setUserAvatar("http://192.168.1.239:8936/uploads/system/user/avatar/40/QQ%E6%88%AA%E5%9B%BE20170615104243.png");
         
         Project project = new Project();
         project.setName("hsd-user-service");

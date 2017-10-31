@@ -1,5 +1,8 @@
 package com.hsd.gitlab.systemhook.bean.event;
 import java.util.List;
+import java.util.Locale;
+
+import org.joda.time.DateTime;
 
 import com.hsd.gitlab.systemhook.bean.Project;
 import com.hsd.gitlab.systemhook.bean.Repository;
@@ -76,5 +79,61 @@ public class TagPushEvent extends BaseEvent {
     private String message;//same as PS001: 
     private String userUsername; //ford， same as PS001: 
     private String userEmail;//same as PS001:
+    
+    
+    
+    /**
+     * 
+     * Method Description
+     * @version Oct 9, 201711:45:10 AM
+     * @author Ford.CHEN
+     * @return
+     */
+    public String toDingTalkMarkdown(){
+        
+       StringBuffer sb = new StringBuffer();
+       sb.append("{ \"msgtype\": \"markdown\",   \"markdown\":          {\"title\": \"gitlab tag event\", \"text\" : \"");
+
+       String tag = "";
+       String[] s = ref.split("\\/");
+       if(s.length == 3){
+           tag = s[2];
+       }
+       
+       String title = "#### " + userName + "  published  " + project.getName()+ ":" + tag + " , at " + (new DateTime()).toString("MM/dd HH:mm EE",Locale.ENGLISH) + " \n";
+       sb.append(title);
+       
+       sb.append(" \"}}");
+        
+        return sb.toString();
+    }
+    
+    
+    
+    /**
+     * 
+     * payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
+     * @version Oct 30, 20179:15:07 AM
+     * @author Ford.CHEN
+     * @return
+     */
+    public String toSlackJson(){
+        
+       StringBuffer sb = new StringBuffer();
+       sb.append("{\"text\": \"");
+        
+       String tag = "";
+       String[] s = ref.split("\\/");
+       if(s.length == 3){
+           tag = s[2];
+       }
+       
+       String title = userName + "  published  " + project.getName()+ ":" + tag + " , at " + (new DateTime()).toString("MM/dd HH:mm EE",Locale.ENGLISH) + " \n";
+       sb.append(title);
+       
+       sb.append(" \n\n\n\n\"} ");
+       
+        return sb.toString();
+    }
     
 }

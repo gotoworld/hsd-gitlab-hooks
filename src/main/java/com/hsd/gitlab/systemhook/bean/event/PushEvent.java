@@ -134,6 +134,10 @@ public class PushEvent extends BaseEvent {
        }
        
        String title = "#### " + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       // Focus on the commit, instead of user, so we cancel this info below showing
+       // HttpHost httpHost = HttpClientUtils.create(userAvatar);
+       // String gitlab_path = httpHost.toURI();
+       // String title = "#### [" + username + "](" + gitlab_path + "/" + userUsername + ") pushed to branch " + branch + " at repository " + project.getName()+ " \n";
        sb.append(title);
        
        
@@ -172,9 +176,13 @@ public class PushEvent extends BaseEvent {
            branch = s[2];
        }
        
-       String title = "" + username + "  pushed to  " + project.getName()+ ":" + branch + " \n";
-       sb.append(title);
        
+       String title = "#### " + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       // Focus on the commit, instead of user, so we cancel this info below showing
+       // HttpHost httpHost = HttpClientUtils.create(userAvatar);
+       // String gitlab_path = httpHost.toURI();
+       // String title = "<" + gitlab_path + "/" + userUsername + "|" + username + ">  pushed to  " + project.getName()+ ":" + branch + " \n";
+       sb.append(title);
        
        String content= ""; 
        for(Commits commit : commits){
@@ -183,11 +191,13 @@ public class PushEvent extends BaseEvent {
        }
        sb.append(content);
        
-       sb.append(" \"}");
+       sb.append(" \n\n\n\n\"} ");
        
        log.debug("to Slack message: {}",sb.toString());
         
         return sb.toString();
     }
+    
+
     
 }

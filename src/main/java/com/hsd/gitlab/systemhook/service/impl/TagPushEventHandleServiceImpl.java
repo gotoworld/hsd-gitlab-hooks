@@ -57,12 +57,21 @@ public class TagPushEventHandleServiceImpl implements EventHandleService {
                 if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
                     
                     //2.2.1 compose message
+                    String textMsg = "";
                     if(IMType.jenkins.equals(outgoingGroup.getImType())){
-                        String textMsg = message;
-                        executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   
+                        textMsg = message;
+                    }else if(IMType.slack.equals(outgoingGroup.getImType())){
+                        textMsg = event.toSlackJson();
+                    }else if(IMType.dingtalk.equals(outgoingGroup.getImType())){
+                        textMsg = event.toDingTalkMarkdown();
+                    }else{
+                        continue;
                     }
                     
                     //2.2.2 post message, multi-thread asynchronous
+                    log.info("tag_push_event, message: {} \n ImUrl:{}",textMsg,outgoingGroup.getImUrl());
+                    
+                    executorService.submit(new TaskOfOutgoingPost(textMsg,outgoingGroup.getImUrl()));   
                 }
             }
         }
