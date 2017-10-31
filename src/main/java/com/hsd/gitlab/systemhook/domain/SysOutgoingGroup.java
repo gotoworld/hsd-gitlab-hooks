@@ -1,6 +1,7 @@
 package com.hsd.gitlab.systemhook.domain;
 
 import com.hsd.gitlab.type.IMType;
+import com.hsd.gitlab.type.SystemEventNames;
 
 import lombok.Data;
 
@@ -21,6 +22,8 @@ public class SysOutgoingGroup extends IdEntity {
     
     private String name;
     private String description;
+    
+    private SystemEventNames event;
     
     
     

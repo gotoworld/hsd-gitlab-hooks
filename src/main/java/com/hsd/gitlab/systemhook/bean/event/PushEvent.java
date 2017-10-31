@@ -177,7 +177,7 @@ public class PushEvent extends BaseEvent {
        }
        
        
-       String title = "#### " + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       String title = "" + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
        // Focus on the commit, instead of user, so we cancel this info below showing
        // HttpHost httpHost = HttpClientUtils.create(userAvatar);
        // String gitlab_path = httpHost.toURI();

@@ -54,7 +54,7 @@ public class TagPushEventHandleServiceImpl implements EventHandleService {
         
         if(! outgoingList.isEmpty()){
             for(SysOutgoingGroup outgoingGroup : outgoingList){
-                if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
+                if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace()) && event.getEventName().equals(outgoingGroup.getEvent())){
                     
                     //2.2.1 compose message
                     String textMsg = "";

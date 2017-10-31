@@ -97,7 +97,7 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         
         if(! outgoingList.isEmpty()){
             for(SysOutgoingGroup outgoingGroup : outgoingList){
-                if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace())){
+                if(outgoingGroup.getGitlabGroupName().equals(event.getProject().getNamespace()) && event.getEventName().equals(outgoingGroup.getEvent())){
                     
                     //2.2.1 compose message
                     String textMsg = "";
@@ -159,7 +159,6 @@ public class PushEventHandleServiceImpl implements EventHandleService {
      * @author Ford.CHEN
      * @param event
      */
-    
     private void persistPushEvent(PushEvent event) {
         //3.1 持久化 SysAuthor
         EntityWrapper<SysAuthor> wrapper = new EntityWrapper<SysAuthor>();
@@ -203,34 +202,40 @@ public class PushEventHandleServiceImpl implements EventHandleService {
         List<Commits> commits = event.getCommits();
         if(! commits.isEmpty()){
            for(Commits commit : commits){
-               SysCommit sysCommit = new SysCommit();
+               EntityWrapper<SysCommit> oldCommitWrapper = new EntityWrapper<SysCommit>();
+               oldCommitWrapper.eq("checkoutSha", commit.getId());
+               SysCommit theCommit = sysCommitService.selectOne(oldCommitWrapper);
                
-               sysCommit.setCheckoutSha(commit.getId());
-               sysCommit.setMessage(commit.getMessage());
-               sysCommit.setCommitTime(commit.getTimestamp());
-               sysCommit.setGitlabUrl(commit.getUrl());
-               
-               EntityWrapper<SysAuthor> cAuthoWrapper = new EntityWrapper<SysAuthor>();
-               cAuthoWrapper.eq("email", event.getUserEmail());
-               SysAuthor cSysAuthor = sysAuthorService.selectOne(cAuthoWrapper);
-               if(cSysAuthor == null){
-                   cSysAuthor = new SysAuthor();
-                   cSysAuthor.setGitlabUserId(event.getUserId());
-                   cSysAuthor.setUserName(event.getUserUsername());//English name
-                   cSysAuthor.setName(event.getUsername());
-                   cSysAuthor.setEmail(event.getUserEmail());
-                   cSysAuthor.setUserAvatar(event.getUserAvatar());
+               if(theCommit == null){
+                   theCommit = new SysCommit();
                    
-                   sysAuthorService.insert(cSysAuthor);
+                   theCommit.setCheckoutSha(commit.getId());
+                   theCommit.setMessage(commit.getMessage());
+                   theCommit.setCommitTime(commit.getTimestamp());
+                   theCommit.setGitlabUrl(commit.getUrl());
+                   
+                   EntityWrapper<SysAuthor> cAuthoWrapper = new EntityWrapper<SysAuthor>();
+                   cAuthoWrapper.eq("email", event.getUserEmail());
+                   SysAuthor cSysAuthor = sysAuthorService.selectOne(cAuthoWrapper);
+                   if(cSysAuthor == null){
+                       cSysAuthor = new SysAuthor();
+                       cSysAuthor.setGitlabUserId(event.getUserId());
+                       cSysAuthor.setUserName(event.getUserUsername());//English name
+                       cSysAuthor.setName(event.getUsername());
+                       cSysAuthor.setEmail(event.getUserEmail());
+                       cSysAuthor.setUserAvatar(event.getUserAvatar());
+                       
+                       sysAuthorService.insert(cSysAuthor);
+                   }
+                   
+                   theCommit.setAuthorId(cSysAuthor.getId());
+                   
+                   theCommit.setProjectId(project.getId());
+                   
+                   sysCommitService.insert(theCommit);
                }
                
-               sysCommit.setAuthorId(cSysAuthor.getId());
-               
-               sysCommit.setProjectId(project.getId());
-               
-               sysCommitService.insert(sysCommit);
-               
-               sysCommitList.add(sysCommit);
+               sysCommitList.add(theCommit);
            }
         }
         

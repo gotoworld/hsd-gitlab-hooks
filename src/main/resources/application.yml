@@ -40,7 +40,7 @@ swagger:
         developer: systemhook
 
 logging:
-  level.root: info
+  level.root: debug
   path: logs/
   config: classpath:logback-spring.xml
 
