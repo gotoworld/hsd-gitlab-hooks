@@ -104,9 +104,11 @@ public class PushEventHandleServiceImpl implements EventHandleService {
                     if(IMType.dingtalk.equals(outgoingGroup.getImType())){
                         textMsg = event.toDingTalkMarkdown();
                     }else if(IMType.slack.equals(outgoingGroup.getImType())){
-                        textMsg = event.toSlackJson();
+                        //since that slack DoNot Support same user each with the message/group Icon, 
+                        //for emphasize the showing so i change the message format from toSlackBasicMessageJson to toSlackAttachMessageJson
+                        textMsg = event.toSlackAttachMessageJson();
                     }else{
-                        //TODO
+                        continue;
                     }
                     
                     log.debug("push event message is composed: {}",textMsg);

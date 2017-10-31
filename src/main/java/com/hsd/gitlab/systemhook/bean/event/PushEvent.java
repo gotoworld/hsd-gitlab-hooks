@@ -133,7 +133,7 @@ public class PushEvent extends BaseEvent {
            branch = s[2];
        }
        
-       String title = "#### " + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
+       String title = "#### " + username + " pushed to branch " + branch + " at repository " + project.getNamespace() + "/" + project.getName()+ " \n";
        // Focus on the commit, instead of user, so we cancel this info below showing
        // HttpHost httpHost = HttpClientUtils.create(userAvatar);
        // String gitlab_path = httpHost.toURI();
@@ -147,7 +147,7 @@ public class PushEvent extends BaseEvent {
            
            DateTime dateTime = new DateTime(commit.getTimestamp());
 //           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  "\\n\\n   ";
-           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() + ", " + dateTime.toString("HH:mm EE",Locale.ENGLISH) +  "\\n\\n   ";
+           content = content + " > [" + commit.getMessage() + "](" + commit.getUrl() + "), " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  "\\n\\n   ";
        }
        sb.append(content);
        
@@ -158,6 +158,7 @@ public class PushEvent extends BaseEvent {
     
     
     
+    
     /**
      * 
      * payload={"text": "A very important thing has occurred! <https://alert-system.com/alerts/1234|Click here> for details!"}
@@ -165,39 +166,93 @@ public class PushEvent extends BaseEvent {
      * @author Ford.CHEN
      * @return
      */
-    public String toSlackJson(){
+    public String toSlackBasicMessageJson(){
         
-       StringBuffer sb = new StringBuffer();
-       sb.append("{\"text\": \"");
+        StringBuffer sb = new StringBuffer();
+        sb.append("{\"text\": \"");
         
-       String branch = "";
-       String[] s = ref.split("\\/");
-       if(s.length == 3){
-           branch = s[2];
-       }
-       
-       
-       String title = "" + username + " pushed to branch " + branch + " at repository " + project.getName()+ " \n";
-       // Focus on the commit, instead of user, so we cancel this info below showing
-       // HttpHost httpHost = HttpClientUtils.create(userAvatar);
-       // String gitlab_path = httpHost.toURI();
-       // String title = "<" + gitlab_path + "/" + userUsername + "|" + username + ">  pushed to  " + project.getName()+ ":" + branch + " \n";
-       sb.append(title);
-       
-       String content= ""; 
-       for(Commits commit : commits){
-           DateTime dateTime = new DateTime(commit.getTimestamp());
-           content = content + "<" + commit.getUrl() + "|" + commit.getMessage().replace("\n", "") + "> , " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  " \n ";
-       }
-       sb.append(content);
-       
-       sb.append(" \n\n\n\n\"} ");
-       
-       log.debug("to Slack message: {}",sb.toString());
+        String branch = "";
+        String[] s = ref.split("\\/");
+        if(s.length == 3){
+            branch = s[2];
+        }
+        
+        
+        String title = "" + username + " pushed to branch " + branch + " at repository " + project.getNamespace() + "/" + project.getName()+ " \n";
+        // Focus on the commit, instead of user, so we cancel this info below showing
+        // HttpHost httpHost = HttpClientUtils.create(userAvatar);
+        // String gitlab_path = httpHost.toURI();
+        // String title = "<" + gitlab_path + "/" + userUsername + "|" + username + ">  pushed to  " + project.getName()+ ":" + branch + " \n";
+        sb.append(title);
+        
+        String content= ""; 
+        for(Commits commit : commits){
+            DateTime dateTime = new DateTime(commit.getTimestamp());
+            content = content + "<" + commit.getUrl() + "|" + commit.getMessage().replace("\n", "") + "> , " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  " \n ";
+        }
+        sb.append(content);
+        
+        sb.append(" \n\n\n\n\"} ");
+        
+        log.debug("to Slack message: {}",sb.toString());
         
         return sb.toString();
     }
     
+    
+    /**
+     * 
+     * {
+     *    "text": "*林智勇* pushed to branch master at repository hsdgold-portal-wap",
+     *    "attachments": [
+     *        {
+     *            "text": "<http://192.168.1.239:8936/gold/hsdgold-portal-wap/commit/b8cd2d6b4542b787d5747c95d326bab5ae661d41|修复wap问题> , linzhiyong, 11:20 Mon \n ",
+     *            "color": "#4286f4",
+     *          "mrkdwn_in": ["text", "pretext"]
+     *        }
+     *    ]
+     *} 
+     * 
+     * @version Oct 30, 20179:15:07 AM
+     * @author Ford.CHEN
+     * @return
+     */
+    public String toSlackAttachMessageJson(){
+        
+        StringBuffer sb = new StringBuffer();
+        sb.append("{\"text\": \"");
+        
+        String branch = "";
+        String[] s = ref.split("\\/");
+        if(s.length == 3){
+            branch = s[2];
+        }
+        
+        
+        String title = "*" + username + "* pushed to branch " + branch + " at repository " + project.getNamespace() + "/" + project.getName()+ "\", \n";
+        // Focus on the commit, instead of user, so we cancel this info below showing
+        // HttpHost httpHost = HttpClientUtils.create(userAvatar);
+        // String gitlab_path = httpHost.toURI();
+        // String title = "<" + gitlab_path + "/" + userUsername + "|" + username + ">  pushed to  " + project.getName()+ ":" + branch + " \n";
+        sb.append(title);
+        sb.append(" \"attachments\": [ ");
+        sb.append(" { \"text\": \"");
+        
+        for(Commits commit : commits){
+            DateTime dateTime = new DateTime(commit.getTimestamp());
+            String content = "<" + commit.getUrl() + "|" + commit.getMessage().replace("\n", "") + "> , " + commit.getAuthor().getName() + ", " + dateTime.toString("MM/dd HH:mm EE",Locale.ENGLISH) +  " \n ";
+            sb.append(content);
+        }
+        sb.append("\", ");
+        sb.append("\"color\": \"#4286f4\",");
+        sb.append("\"mrkdwn_in\": [\"text\", \"pretext\"]");
+        
+        sb.append(" }]} ");
+        
+        log.debug("to Slack message: {}",sb.toString());
+        
+        return sb.toString();
+    }
 
     
 }
