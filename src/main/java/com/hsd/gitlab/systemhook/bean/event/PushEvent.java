@@ -1,6 +1,7 @@
 package com.hsd.gitlab.systemhook.bean.event;
 import java.util.List;
 import java.util.Locale;
+import java.util.Random;
 
 import org.joda.time.DateTime;
 
@@ -113,6 +114,11 @@ public class PushEvent extends BaseEvent {
     private List<Commits> commits;
     
     private Long totalCommitsCount;
+    
+    
+    
+    final static String[] colors = {"5b4b51","8dbeb2","f2ebc1","f2b468","ee5d62","0a223f","084958","f0433e","bd272f","268a70","bedb48","fee13a","fb7220","2aab9e"};
+    
     
     
     /**
@@ -244,7 +250,8 @@ public class PushEvent extends BaseEvent {
             sb.append(content);
         }
         sb.append("\", ");
-        sb.append("\"color\": \"#4286f4\",");
+        
+        sb.append("\"color\": \"#" + colors[(new Random()).nextInt(14)] + "\",");
         sb.append("\"mrkdwn_in\": [\"text\", \"pretext\"]");
         
         sb.append(" }]} ");

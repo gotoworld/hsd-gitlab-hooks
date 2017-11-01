@@ -136,4 +136,50 @@ public class TagPushEvent extends BaseEvent {
         return sb.toString();
     }
     
+    /**
+     * 
+     * to slack, interactive message with button
+     * 
+     *{
+     *    "text": "Would you like to play a game?",
+     *    "attachments": [
+     *        {
+     *            "text": "Choose a game to play",
+     *            "fallback": "You are unable to choose a game",
+     *            "callback_id": "wopr_game",
+     *            "color": "#3AA3E3",
+     *            "attachment_type": "default",
+     *            "actions": [
+     *                {
+     *                    "name": "game",
+     *                    "text": "Confirm",
+     *                    "type": "button",
+     *                    "value": "confirm"
+     *                },
+     *                {
+     *                    "name": "game",
+     *                    "text": "Quit",
+     *                    "type": "button",
+     *                    "value": "quit"
+     *                },
+     *                {
+     *                    "name": "game",
+     *                    "text": "Cancel",
+     *                    "style": "danger",
+     *                    "type": "button",
+     *                    "value": "cancel",
+     *                    "confirm": {
+     *                        "title": "Are you sure?",
+     *                        "text": "Wouldn't you prefer a good game of chess?",
+     *                        "ok_text": "Yes",
+     *                        "dismiss_text": "No"
+     *                    }
+     *                }
+     *            ]
+     *        }
+     *    ]
+     *} 
+     * 
+     */
+    
 }
