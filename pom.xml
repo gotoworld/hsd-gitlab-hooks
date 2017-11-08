@@ -245,7 +245,7 @@
 							<Class-Path>.</Class-Path>
 						</manifestEntries>
 						<manifest>
-							<mainClass>com.hsd.HSDEurekaServer</mainClass>
+							<mainClass>com.hsd.gitlab.GitlabHooksApplication</mainClass>
 							<useUniqueVersions>false</useUniqueVersions>
 							<addClasspath>true</addClasspath>
 							<classpathPrefix>lib/</classpathPrefix>
@@ -253,8 +253,9 @@
 					</archive>
 					<excludes>
 						<exclude>config/</exclude>
-						<exclude>logback.xml</exclude>
+						<exclude>logback-spring.xml</exclude>
 						<exclude>*.properties</exclude>
+						<exclude>*.yml</exclude>
 					</excludes>
 				</configuration>
 			</plugin>
