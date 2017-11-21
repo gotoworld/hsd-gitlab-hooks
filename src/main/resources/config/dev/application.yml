@@ -29,20 +29,26 @@ eureka:
     instance:
         statusPageUrlPath: /info
         healthCheckUrlPath: /health
+        perferIpAddress: true
     client:
+#        registerWithEureka: true
+#        fetchRegistry: true
         serviceUrl:
-            defaultZone: http://localhost:9080/eureka/
+            defaultZone: http://${security.user.name}:${security.user.password}@localhost:9080/eureka/
+
+security:
+  basic:
+    enabled: true
+  user:
+    name: admin
+    password: admin
+
 swagger:
     basepackage: com.hsd.gitlab.systemhook.web
     service:
         name: systemhook
         description: systemhook后端服务
         developer: systemhook
-
-logging:
-  level.root: debug
-  path: logs/
-  config: classpath:logback-spring.xml
 
 hooktools:
   swagger-open: true #是否开启swagger (true/false)
@@ -61,3 +67,8 @@ mybatis-plus:
     lazyLoadingEnabled: true #延时加载的开关
     multipleResultSetsEnabled: true #开启的话，延时加载一个属性时会加载该对象全部属性，否则按需加载属性
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl #打印sql语句,调试用
+
+
+logging:
+  level.root: info
+  path: logs/
